@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <cell-list :minefield='getCellList' @onCellClick="handleCellClick($event)"></cell-list>
+    <cell-list :minefield='getCellList' @onCellClick="handleCellClick($event)" @onCellShiftClick="handelCellShiftClick($event)"></cell-list>
   </div>
 </template>
 
@@ -16,27 +16,67 @@ export default {
     CellList
   },
   data(){
-    return {
-      borderSize: 10,
-    }
+    return {}
   },
   computed:{
     ...mapGetters('mine',[
-      'getCellList'
+      'getCellList',
+      'getBombList',
+      'getBomb',
+      'getMarkList'
+    ]),
+    ...mapGetters([
+      'getBorderSize',
+      'getIsFirstClick'
     ])
   },
   methods:{
     ...mapMutations('mine',[
       'setCellList',
       'initCellList',
-      'revealCell'
+      'revealRelatedCell',
+      'assignBomb',
+      'calculateNum',
+      'revealAllCell',
+      'showLastClickCell',
+      'setLastClick',
+      'markCell'
+    ]),
+    ...mapMutations([
+      'setFirstClick',
+      'setGameLose'
     ]),
     handleCellClick(cell){
-      this.revealCell(cell)
+      // if it is first click, we should assign the bomb to field(Start the game)
+      if (this.getIsFirstClick){
+        this.setFirstClick()
+        this.assignBomb(cell, this.getBombQuantity)
+        this.calculateNum()
+      }
+
+      //log the last click cell
+      this.setLastClick(cell)
+
+      // reveal field
+      this.revealRelatedCell(cell)
+
+      //check the cell is containing bomb
+      if (cell.text === this.getBomb){
+        this.setGameLose()
+        this.revealAllCell()
+        this.showLastClickCell()
+        console.log('You lose')
+      }
+      
+      // 
+    },
+    handelCellShiftClick(cell){
+      console.log(cell.x, cell.y)
+      this.markCell(cell)
     }
   },
   beforeMount(){
-    this.initCellList(this.borderSize)
+    this.initCellList(this.getBorderSize)
   }
 }
 </script>

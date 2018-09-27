@@ -1,6 +1,6 @@
 <template>
-    <div class="cell-list">
-        <Cell @cellClick="onCellClick($event)" v-for="(cellData, index) in minefield" :key="index" :cell-data="cellData"></Cell>
+    <div class="cell-list" :style="calWidth()">
+        <Cell @cellClick="onCellClick($event)" @cellShiftClick="onCellShiftClick($event)" v-for="(cellData, index) in minefield" :key="index" :cell-data="cellData"></Cell>
     </div>
 </template>
 
@@ -20,6 +20,14 @@ export default {
     methods:{
         onCellClick(cell){
             this.$emit('onCellClick', cell)
+        },
+        onCellShiftClick(cell){
+            this.$emit('onCellShiftClick', cell)
+        },
+        calWidth(){
+            return {
+                width: `400px`
+            }
         }
     }
 }
@@ -28,7 +36,6 @@ export default {
 <style lang="scss" scoped>
     .cell-list{
         position: relative;
-        width: fit-content;
         margin: 50px auto 0;
     }
 </style>
