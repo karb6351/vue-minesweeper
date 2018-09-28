@@ -1,19 +1,21 @@
 <template>
   <div id="app">
+    <game-status></game-status>
     <cell-list :minefield='getCellList' @onCellClick="handleCellClick($event)" @onCellShiftClick="handelCellShiftClick($event)"></cell-list>
   </div>
 </template>
 
 <script>
 import CellList from './components/CellList'
+import GameStatus from './components/GameStatus'
 import Store from './store/store'
-import { mapGetters, mapMutations } from 'vuex';
-
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'app',
   Store,
   components: {
-    CellList
+    CellList,
+    GameStatus
   },
   data(){
     return {}
@@ -46,12 +48,16 @@ export default {
       'setFirstClick',
       'setGameLose'
     ]),
+    ...mapMutations('status', [
+      'setStatus'
+    ]),
     handleCellClick(cell){
       // if it is first click, we should assign the bomb to field(Start the game)
       if (this.getIsFirstClick){
         this.setFirstClick()
         this.assignBomb(cell, this.getBombQuantity)
         this.calculateNum()
+        this.setStatus('Game start')
       }
 
       //log the last click cell
@@ -65,7 +71,8 @@ export default {
         this.setGameLose()
         this.revealAllCell()
         this.showLastClickCell()
-        console.log('You lose')
+        this.setStatus('You lose')
+      
       }
       
       // 
@@ -77,6 +84,7 @@ export default {
   },
   beforeMount(){
     this.initCellList(this.getBorderSize)
+    this.setStatus('Click the cell to start game')
   }
 }
 </script>

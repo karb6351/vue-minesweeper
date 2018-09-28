@@ -1,6 +1,12 @@
 <template>
     <div class="cell-list" :style="calWidth()">
-        <Cell @cellClick="onCellClick($event)" @cellShiftClick="onCellShiftClick($event)" v-for="(cellData, index) in minefield" :key="index" :cell-data="cellData"></Cell>
+        <Cell 
+            @cellClick="onCellClick($event)" 
+            @cellShiftClick="onCellShiftClick($event)" 
+            v-for="(cellData, index) in minefield" 
+            :key="index" 
+            :cell-data="cellData">
+        </Cell>
     </div>
 </template>
 

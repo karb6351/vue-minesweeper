@@ -89,6 +89,8 @@ const showLastClickCell = state => state.cellList.find(item => item.lastClick)
 
 const markCell = (state, cell) => {
     const index = state.cellList.findIndex(item => item.x === cell.x && item.y === cell.y)
+    if (state.cellList[index].isRevealed)
+        return
     state.cellList[index].marked = !state.cellList[index].marked
 } 
 
