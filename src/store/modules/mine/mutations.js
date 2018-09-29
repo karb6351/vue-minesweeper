@@ -18,7 +18,7 @@ const initCellList = (state, size = 10) => {
     state.cellList = tempCellList
 }
 
-const assignBomb = (state, cell, bombQuantity = 15) => {
+const assignBomb = (state, {cell, bombQuantity = 15}) => {
     const shuffledArray = _.shuffle(state.cellList)
     let count = 0
     let currentIndex = 0

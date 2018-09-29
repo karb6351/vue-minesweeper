@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <game-status></game-status>
+    <game-status @resetGame="handleResetGame"></game-status>
     <cell-list :minefield='getCellList' @onCellClick="handleCellClick($event)" @onCellShiftClick="handelCellShiftClick($event)"></cell-list>
   </div>
 </template>
@@ -25,11 +25,14 @@ export default {
       'getCellList',
       'getBombList',
       'getBomb',
-      'getMarkList'
+      'getMarkList',
+      'isFoundAllTheBomb'
     ]),
     ...mapGetters([
       'getBorderSize',
-      'getIsFirstClick'
+      'getIsFirstClick',
+      'getBombQuantity',
+      'getGameLost'
     ])
   },
   methods:{
@@ -42,7 +45,8 @@ export default {
       'revealAllCell',
       'showLastClickCell',
       'setLastClick',
-      'markCell'
+      'markCell',
+      
     ]),
     ...mapMutations([
       'setFirstClick',
@@ -54,8 +58,8 @@ export default {
     handleCellClick(cell){
       // if it is first click, we should assign the bomb to field(Start the game)
       if (this.getIsFirstClick){
-        this.setFirstClick()
-        this.assignBomb(cell, this.getBombQuantity)
+        this.setFirstClick(false)
+        this.assignBomb({cell, bombQuantity: this.getBombQuantity})
         this.calculateNum()
         this.setStatus('Game start')
       }
@@ -73,17 +77,28 @@ export default {
         this.showLastClickCell()
         this.setStatus('You lose')
       
+      }else if(this.isFoundAllTheBomb){
+        // check if user win the game
+        this.revealAllCell()
+        this.setStatus('You win')
       }
       
-      // 
+      
+      
     },
     handelCellShiftClick(cell){
       console.log(cell.x, cell.y)
       this.markCell(cell)
+    },
+    handleResetGame(){
+      this.initCellList(this.getBorderSize)
+      this.setFirstClick(true)
+      this.setStatus('Click the cell to start game')
     }
   },
   beforeMount(){
     this.initCellList(this.getBorderSize)
+    this.setFirstClick(true)
     this.setStatus('Click the cell to start game')
   }
 }

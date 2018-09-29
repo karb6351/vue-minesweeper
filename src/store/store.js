@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import mine from './modules/mine/mine' 
+import mine from './modules/mine/mine'
 import global from './modules/global'
 import status from './modules/status/status'
 

@@ -1,8 +1,11 @@
-const setFirstClick = state => state.isFirstClick = false
+const setFirstClick = (state, isFirstClick = false) => (state.isFirstClick = isFirstClick)
 
-const setGameLose = state => state.lose = true
+const setGameLose = state => (state.lose = true)
 
-export default{
+const setGameWin = state => (state.win = true)
+
+export default {
     setFirstClick,
-    setGameLose
+    setGameLose,
+    setGameWin
 }
